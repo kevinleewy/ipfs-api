@@ -1,6 +1,6 @@
 import IPFSController from './IPFSController.js';
 
-export default class MiscController extends IPFSController{
+export default class MiscController extends IPFSController {
     
     id(req, res) {
 
