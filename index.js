@@ -1,10 +1,15 @@
-//Required modules
+/**
+ * Module dependencies.
+ */
 const ipfsAPI = require('ipfs-api');
 const express = require('express');
 const fs = require('fs');
 const app = express();
 
-//Connceting to the ipfs network via infura gateway
+const api = require('./api');
+const config = require('./config.json');
+
+//Connecting to the ipfs network via infura gateway
 const ipfs = ipfsAPI('localhost', '5001', {protocol: 'http'})
 
 //Reading file from computer
@@ -125,4 +130,7 @@ app.get('/version', function(req, res) {
     })
 })
 
-app.listen(3000, () => console.log('App listening on port 3000!'))
+// api router
+app.use('/api', api({ config, ipfs }));
+
+app.listen(config.port, () => console.log(`App listening on port ${config.port}!`));
