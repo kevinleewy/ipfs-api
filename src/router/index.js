@@ -45,10 +45,13 @@ export default ({ config, ipfs }) => {
     //Config
     router.get('/config', configController.get.bind(configController))
     router.get('/config/:key', configController.getByKey.bind(configController))
+    //router.post('/config', configController.set.bind(configController))
+    //router.post('/config/:key', configController.setByKey.bind(configController))
 
     //Files
     router.post('/add', filesController.add.bind(filesController))
     router.post('/addFromFs', filesController.addFromFs.bind(filesController))
+    router.post('/addFromUrl', filesController.addFromUrl.bind(filesController))
     router.get('/cat/:cid', filesController.cat.bind(filesController))
     router.get('/ls/:cid', filesController.ls.bind(filesController))
 

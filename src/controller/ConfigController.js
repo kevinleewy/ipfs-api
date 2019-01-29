@@ -27,4 +27,36 @@ export default class ConfigController extends IPFSController {
             }
         })
     }
+
+    set(req, res) {
+
+        const newConfig = req.body.config;
+        
+        this.ipfs.config.replace(newConfig, (err) => {
+            if (err) {
+                console.log(err);
+                res.json(err)
+            } else {
+                res.json({
+                    status: "OK"
+                });
+            }
+        })
+    }
+
+    setByKey(req, res) {
+
+        const { key, value } = req.body;
+
+        this.ipfs.config.set(key, value, (err) => {
+            if (err) {
+                console.log(err);
+                res.json(err)
+            } else {
+                res.json({
+                    status: "OK"
+                });
+            }
+        })
+    }
 }
