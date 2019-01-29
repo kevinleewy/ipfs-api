@@ -7,12 +7,12 @@ import {
 } from '../controller';
 
 export default ({ config, ipfs }) => {
-    let router = Router();
+    const router = Router();
     
     //Controllers
-    filesController = new FilesController(ipfs);
-    miscController = new MiscController(ipfs);
-    swarmController = new SwarmController(ipfs);
+    const filesController = new FilesController(ipfs);
+    const miscController = new MiscController(ipfs);
+    const swarmController = new SwarmController(ipfs);
 
 	router.get('/', (req, res) => {
 		res.json("Hello World");
