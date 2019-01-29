@@ -2,16 +2,29 @@ import IPFSController from './IPFSController.js';
 
 export default class FilesController extends IPFSController {
     
+    add(req, res) {
+
+        this.ipfs.files.add(path, (err, result) => {
+            if (err) {
+                console.log(err);
+                res.json(err)
+            } else {
+                res.json(result);
+            }
+        })
+    }
+    
     addFromFs(req, res) {
 
-        const path = req.params.path;
+        const path = req.body.path;
+        
         const options = {
             recursive: true,    //add files recursively
             ignore: [],
             hidden: true    //add hidden/dot files
         }
 
-        this.ipfs.addFromFs(path, options, (err, result) => {
+        this.ipfs.util.addFromFs(path, options, (err, result) => {
             if (err) {
                 console.log(err);
                 res.json(err)

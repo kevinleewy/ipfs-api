@@ -3,6 +3,7 @@
  */
 import 'dotenv/config';
 import ipfsAPI from 'ipfs-api';
+import bodyParser from 'body-parser';
 import express from 'express';
 import fs from 'fs';
 
@@ -10,6 +11,7 @@ import router from './router';
 import config from './config.json';
 
 const app = express();
+app.use(bodyParser.json()); // for parsing application/json
 
 //example to access variables in .env
 //console.log("test: " + process.env.MY_SECRET);
