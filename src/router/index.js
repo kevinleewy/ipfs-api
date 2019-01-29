@@ -61,8 +61,8 @@ export default ({ config, ipfs }) => {
     router.get('/swarm/peers', swarmController.peers.bind(swarmController));
 
     //Stats
-    router.get('/stats/bw', swarmController.bw.bind(statsController));
-    router.get('/stats/repo', swarmController.repo.bind(statsController));
+    router.get('/stats/bw', statsController.bw.bind(statsController));
+    router.get('/stats/repo', statsController.repo.bind(statsController));
 
 	return router;
 }
