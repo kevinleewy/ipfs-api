@@ -4,7 +4,7 @@ export default class MiscController extends IPFSController {
     
     id(req, res) {
 
-        ipfs.id((err, identity) => {
+        this.ipfs.id((err, identity) => {
             if (err) {
                 console.log(err);
                 res.json(err)
@@ -17,7 +17,7 @@ export default class MiscController extends IPFSController {
     
     version(req, res) {
 
-        ipfs.version((err, version) => {
+        this.ipfs.version((err, version) => {
             if (err) {
                 console.log(err);
                 res.json(err)
