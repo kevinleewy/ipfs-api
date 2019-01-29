@@ -1,8 +1,10 @@
 import { Router } from 'express';
 
 import {
+    ConfigController,
     FilesController,
     MiscController,
+    StatsController,
     SwarmController
 } from '../controller';
 
@@ -10,8 +12,10 @@ export default ({ config, ipfs }) => {
     const router = Router();
     
     //Controllers
+    const configController = new ConfigController(ipfs);
     const filesController = new FilesController(ipfs);
     const miscController = new MiscController(ipfs);
+    const statsController = new StatsController(ipfs);
     const swarmController = new SwarmController(ipfs);
 
     //
@@ -38,6 +42,10 @@ export default ({ config, ipfs }) => {
 
     })
 
+    //Config
+    router.get('/config', configController.get.bind(configController))
+    router.get('/config/:key', configController.getByKey.bind(configController))
+
     //Files
     router.post('/add', filesController.add.bind(filesController))
     router.post('/addFromFs', filesController.addFromFs.bind(filesController))
@@ -51,6 +59,10 @@ export default ({ config, ipfs }) => {
     //Network
     router.get('/swarm/addrs', swarmController.addrs.bind(swarmController));
     router.get('/swarm/peers', swarmController.peers.bind(swarmController));
+
+    //Stats
+    router.get('/stats/bw', swarmController.bw.bind(statsController));
+    router.get('/stats/repo', swarmController.repo.bind(statsController));
 
 	return router;
 }
