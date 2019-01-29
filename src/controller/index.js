@@ -1,9 +1,3 @@
-const FilesController = require("./FilesController.js");
-const MiscController = require("./MiscController.js");
-const SwarmController = require("./SwarmController.js");
-
-module.exports = {
-    FilesController,
-    MiscController,
-    SwarmController
-};
+export * from "./FilesController.js";
+export * from "./MiscController.js";
+export * from "./SwarmController.js";

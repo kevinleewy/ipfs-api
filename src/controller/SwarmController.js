@@ -1,6 +1,6 @@
-const IPFSController = require("./IPFSController.js");
+import IPFSController from './IPFSController.js';
 
-module.exports = class SwarmController extends IPFSController{
+export default class SwarmController extends IPFSController{
     
     addrs(req, res) {
 

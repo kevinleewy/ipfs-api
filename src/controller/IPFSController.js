@@ -1,4 +1,4 @@
-module.exports = class IPFSController {
+export default class IPFSController {
     
     constructor(ipfs) {
         this.ipfs = ipfs;

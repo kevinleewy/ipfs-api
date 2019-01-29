@@ -1,13 +1,18 @@
 /**
  * Module dependencies.
  */
-const ipfsAPI = require('ipfs-api');
-const express = require('express');
-const fs = require('fs');
+import 'dotenv/config';
+import ipfsAPI from 'ipfs-api';
+import express from 'express';
+import fs from 'fs';
+
+import router from './router';
+import config from './config.json';
+
 const app = express();
 
-const router = require('./router');
-const config = require('./config.json');
+//test
+console.log("test: " + process.env.MY_SECRET);
 
 //Connecting to the ipfs network via infura gateway
 const ipfs = ipfsAPI('localhost', '5001', {protocol: 'http'})

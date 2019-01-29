@@ -1,6 +1,6 @@
-const IPFSController = require("./IPFSController.js");
+import IPFSController from './IPFSController.js';
 
-module.exports = class FilesController extends IPFSController{
+export default class FilesController extends IPFSController{
     
     cat(req, res) {
 

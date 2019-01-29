@@ -1,14 +1,13 @@
-const express = require('express');
+import { Router } from 'express';
 
-const {
+import {
     FilesController,
     MiscController,
     SwarmController
-} = require('../controller');
+} from '../controller';
 
-
-module.exports = ({ config, ipfs }) => {
-    let router = express.Router();
+export default ({ config, ipfs }) => {
+    let router = Router();
     
     //Controllers
     filesController = new FilesController(ipfs);
