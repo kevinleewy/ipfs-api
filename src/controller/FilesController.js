@@ -34,11 +34,11 @@ export default class FilesController extends IPFSController {
         })
     }
 
-    addFromUrl(req, res) {
+    addFromURL(req, res) {
 
         const url = req.body.url;
 
-        this.ipfs.util.addFromUrl(url, (err, result) => {
+        this.ipfs.util.addFromURL(url, (err, result) => {
             if (err) {
                 console.log(err);
                 res.json(err)

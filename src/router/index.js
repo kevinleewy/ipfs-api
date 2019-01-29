@@ -51,7 +51,7 @@ export default ({ config, ipfs }) => {
     //Files
     router.post('/add', filesController.add.bind(filesController))
     router.post('/addFromFs', filesController.addFromFs.bind(filesController))
-    router.post('/addFromUrl', filesController.addFromUrl.bind(filesController))
+    router.post('/addFromUrl', filesController.addFromURL.bind(filesController))
     router.get('/cat/:cid', filesController.cat.bind(filesController))
     router.get('/ls/:cid', filesController.ls.bind(filesController))
 
