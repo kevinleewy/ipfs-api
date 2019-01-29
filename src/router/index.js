@@ -1,6 +1,6 @@
 const express = require('express');
 
-export default ({ config, ipfs }) => {
+module.exports = ({ config, ipfs }) => {
 	let router = express.Router();
 
 	router.get('/', (req, res) => {
