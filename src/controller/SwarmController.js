@@ -1,6 +1,6 @@
 import IPFSController from './IPFSController.js';
 
-export default class SwarmController extends IPFSController{
+export default class SwarmController extends IPFSController {
     
     addrs(req, res) {
 

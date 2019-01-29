@@ -1,6 +1,6 @@
 import IPFSController from './IPFSController.js';
 
-export default class FilesController extends IPFSController{
+export default class FilesController extends IPFSController {
     
     cat(req, res) {
 

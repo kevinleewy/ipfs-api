@@ -14,7 +14,7 @@ export default ({ config, ipfs }) => {
     const miscController = new MiscController(ipfs);
     const swarmController = new SwarmController(ipfs);
 
-	router.get('/', (req, res) => {
+    router.get('/', (req, res) => {
 		res.json("Hello World");
     });
 
@@ -56,7 +56,7 @@ export default ({ config, ipfs }) => {
     router.get('/id', miscController.id)
     router.get('/version', miscController.version)
 
-    router.get('/swarm/addrs', SwarmController.addrs);
+    router.get('/swarm/addrs', swarmController.addrs);
     router.get('/swarm/peers', swarmController.peers);
 
 	return router;
