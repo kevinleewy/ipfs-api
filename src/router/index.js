@@ -26,22 +26,6 @@ export default ({ config, ipfs }) => {
         });
     });
 
-    //Getting the uploaded file via hash code.
-    router.get('/getfile', function(req, res) {
-        
-        //This hash is returned hash of addFile router.
-        const validCID = 'QmS4ustL54uo8FzR9455qaxZwuMiUhyvMcX9Ba8nUH4uVv'
-
-        ipfs.files.get(validCID, function (err, files) {
-            files.forEach((file) => {
-            console.log(file.path)
-                //console.log(file.content.toString('utf8'))
-            })
-        res.json(files.map(file => file.path));
-        })
-
-    })
-
     //Config
     router.get('/config', configController.get.bind(configController))
     router.get('/config/:key', configController.getByKey.bind(configController))
@@ -53,6 +37,7 @@ export default ({ config, ipfs }) => {
     router.post('/addFromFs', filesController.addFromFs.bind(filesController))
     router.post('/addFromUrl', filesController.addFromURL.bind(filesController))
     router.get('/cat/:cid', filesController.cat.bind(filesController))
+    router.get('/get/:cid', filesController.get.bind(filesController))
     router.get('/ls/:cid', filesController.ls.bind(filesController))
 
     //Miscellaneous
