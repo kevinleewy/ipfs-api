@@ -66,7 +66,7 @@ export default class FilesController extends IPFSController {
         
         const cid = req.params.cid;
  
-        ipfs.ls(cid, (err, files) => {
+        this.ipfs.ls(cid, (err, files) => {
             if (err) {
                 console.log(err);
                 res.json(err);
