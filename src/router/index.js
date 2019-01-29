@@ -35,7 +35,7 @@ export default ({ config, ipfs }) => {
     })
 
     //Getting the uploaded file via hash code.
-    router.get('/cat/:cid', filesController.cat)
+    router.get('/cat/:cid', filesController.cat.bind(filesController))
 
     //ls
     router.get('/ls/:cid', function(req, res) {
@@ -53,11 +53,11 @@ export default ({ config, ipfs }) => {
         })	    
     })
 
-    router.get('/id', miscController.id)
-    router.get('/version', miscController.version)
+    router.get('/id', miscController.id.bind(miscController));
+    router.get('/version', miscController.version.bind(miscController));
 
-    router.get('/swarm/addrs', swarmController.addrs);
-    router.get('/swarm/peers', swarmController.peers);
+    router.get('/swarm/addrs', swarmController.addrs.bind(swarmController));
+    router.get('/swarm/peers', swarmController.peers.bind(swarmController));
 
 	return router;
 }
