@@ -9,7 +9,6 @@ export default class MiscController extends IPFSController {
                 console.log(err);
                 res.json(err)
             } else {
-                console.log(identity);
                 res.json(identity);
             }
         })
@@ -22,7 +21,6 @@ export default class MiscController extends IPFSController {
                 console.log(err);
                 res.json(err)
             } else {
-                console.log(version);
                 res.json(version);
             }
         })

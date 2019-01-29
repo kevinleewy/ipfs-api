@@ -9,7 +9,6 @@ export default class SwarmController extends IPFSController {
                 console.log(err);
                 res.json(err)
             } else {
-                console.log(addrs);
                 res.json(addrs);
             }
         })
@@ -17,12 +16,13 @@ export default class SwarmController extends IPFSController {
     
     peers(req, res) {
 
-        this.ipfs.swarm.peers({verbose: false}, (err, peerInfos) => {
+        const options = { verbose: false };
+        
+        this.ipfs.swarm.peers(options, (err, peerInfos) => {
             if (err) {
                 console.log(err);
                 res.json(err)
             } else {
-                console.log(peerInfos);
                 res.json(peerInfos);
             }
         })

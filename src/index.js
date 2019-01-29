@@ -11,11 +11,11 @@ import config from './config.json';
 
 const app = express();
 
-//test
-console.log("test: " + process.env.MY_SECRET);
+//example to access variables in .env
+//console.log("test: " + process.env.MY_SECRET);
 
-//Connecting to the ipfs network via infura gateway
-const ipfs = ipfsAPI('localhost', '5001', {protocol: 'http'})
+//Connecting to the IPFS network
+const ipfs = ipfsAPI('localhost', '5001', { protocol: 'http' })
 
 //Reading file from computer
 let testFile = fs.readFileSync("assets/hello.txt");
@@ -28,13 +28,16 @@ app.get('/addfile', function(req, res) {
     ipfs.files.add(testBuffer, function (err, file) {
         if (err) {
             console.log(err);
+        } else {
+            console.log(file);
+            res.json(file);
         }
-        console.log(file);
     })
 
 })
 
-// api router
+// API router
 app.use('/api', router({ config, ipfs }));
 
+// Start listening
 app.listen(config.port, () => console.log(`App listening on port ${config.port}!`));

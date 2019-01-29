@@ -14,8 +14,12 @@ export default ({ config, ipfs }) => {
     const miscController = new MiscController(ipfs);
     const swarmController = new SwarmController(ipfs);
 
+    //
     router.get('/', (req, res) => {
-		res.json("Hello World");
+		res.json({
+            message: "Hello World",
+            queryParams: req.params
+        });
     });
 
     //Getting the uploaded file via hash code.
@@ -34,28 +38,16 @@ export default ({ config, ipfs }) => {
 
     })
 
-    //Getting the uploaded file via hash code.
+    //Files
+    router.get('/addFromFs/:path', filesController.addFromFs.bind(filesController))
     router.get('/cat/:cid', filesController.cat.bind(filesController))
+    router.get('/ls/:cid', filesController.ls.bind(filesController))
 
-    //ls
-    router.get('/ls/:cid', function(req, res) {
-        
-        const cid = req.params.cid;
-        console.log(cid);    
-        ipfs.files.ls(cid, (err, files) => {
-            if (err) {
-                console.log(err);
-            res.json(err)
-            } else {
-                console.log(files);
-            res.json(files);
-        }
-        })	    
-    })
-
+    //Miscellaneous
     router.get('/id', miscController.id.bind(miscController));
     router.get('/version', miscController.version.bind(miscController));
 
+    //Network
     router.get('/swarm/addrs', swarmController.addrs.bind(swarmController));
     router.get('/swarm/peers', swarmController.peers.bind(swarmController));
 
