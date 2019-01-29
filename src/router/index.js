@@ -1,14 +1,14 @@
-import { Router } from 'express';
+const express = require('express');
 
 export default ({ config, ipfs }) => {
-	let api = Router();
+	let router = express.Router();
 
-	api.get('/', (req, res) => {
+	router.get('/', (req, res) => {
 		res.json("Hello World");
     });
 
     //Getting the uploaded file via hash code.
-    app.get('/getfile', function(req, res) {
+    router.get('/getfile', function(req, res) {
         
         //This hash is returned hash of addFile router.
         const validCID = 'QmS4ustL54uo8FzR9455qaxZwuMiUhyvMcX9Ba8nUH4uVv'
@@ -24,7 +24,7 @@ export default ({ config, ipfs }) => {
     })
 
     //Getting the uploaded file via hash code.
-    app.get('/cat/:cid', function(req, res) {
+    router.get('/cat/:cid', function(req, res) {
 
         //This hash is returned hash of addFile router.
         const cid = req.params.cid;
@@ -41,7 +41,7 @@ export default ({ config, ipfs }) => {
     })
 
     //ls
-    app.get('/ls/:cid', function(req, res) {
+    router.get('/ls/:cid', function(req, res) {
         
         const cid = req.params.cid;
         console.log(cid);    
@@ -56,7 +56,7 @@ export default ({ config, ipfs }) => {
         })	    
     })
 
-    app.get('/swarm/addrs', function(req, res) {
+    router.get('/swarm/addrs', function(req, res) {
 
         ipfs.swarm.addrs((err, addrs) => {
             if (err) {
@@ -69,7 +69,7 @@ export default ({ config, ipfs }) => {
         })
     })
 
-    app.get('/swarm/peers', function(req, res) {
+    router.get('/swarm/peers', function(req, res) {
 
         ipfs.swarm.peers({verbose: false}, (err, peerInfos) => {
             if (err) {
@@ -82,7 +82,7 @@ export default ({ config, ipfs }) => {
         })
     })
 
-    app.get('/id', function(req, res) {
+    router.get('/id', function(req, res) {
 
         ipfs.id((err, identity) => {
             if (err) {
@@ -95,7 +95,7 @@ export default ({ config, ipfs }) => {
         })
     })
 
-    app.get('/version', function(req, res) {
+    router.get('/version', function(req, res) {
 
         ipfs.version((err, version) => {
             if (err) {
@@ -108,5 +108,5 @@ export default ({ config, ipfs }) => {
         })
     })
 
-	return api;
+	return router;
 }

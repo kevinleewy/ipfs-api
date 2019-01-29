@@ -6,7 +6,7 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 
-const api = require('./api');
+const router = require('./router');
 const config = require('./config.json');
 
 //Connecting to the ipfs network via infura gateway
@@ -131,6 +131,6 @@ app.get('/version', function(req, res) {
 })
 
 // api router
-app.use('/api', api({ config, ipfs }));
+app.use('/api', router({ config, ipfs }));
 
 app.listen(config.port, () => console.log(`App listening on port ${config.port}!`));
