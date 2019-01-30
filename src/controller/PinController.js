@@ -36,7 +36,7 @@ export default class PinController extends IPFSController {
         const hash = req.params.hash;
         const options = { recursive: true };
  
-        this.ipfs.pin.ls(hash, options, (err, pinset) => {
+        this.ipfs.pin.rm(hash, options, (err, pinset) => {
             if (err) {
                 console.log(err);
                 res.json(err);
