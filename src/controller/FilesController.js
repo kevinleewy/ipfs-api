@@ -67,11 +67,12 @@ export default class FilesController extends IPFSController {
         const cid = req.params.cid;
 
         this.ipfs.files.get(cid, (err, files) => {
-            files.forEach((file) => {
-                console.log(file.path)
-                //console.log(file.content.toString('utf8'))
-            })
-            res.json(files.map(file => file.path));
+            res.json(files.map(file => {
+                return {
+                    path: file.path,
+                    content: file.content ? file.content.toString('utf8') : null
+                }
+            }));
         })
 
     }
