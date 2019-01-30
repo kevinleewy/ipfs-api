@@ -15,7 +15,7 @@ git clone <>
 3. Call API
 Send a GET request to
 ```
-ec2-13-57-237-34.us-west-1.compute.amazonaws.com:3000/id
+ec2-13-57-237-34.us-west-1.compute.amazonaws.com:3000/api/id
 ```
 
 Get the following response
@@ -31,4 +31,9 @@ Get the following response
     "agentVersion": "go-ipfs/0.4.15/",
     "protocolVersion": "ipfs/0.1.0"
 }
+```
+
+To retrieve files in sample dir, send a GET request to
+```
+ec2-13-57-237-34.us-west-1.compute.amazonaws.com:3000/api/ls/QmS4ustL54uo8FzR9455qaxZwuMiUhyvMcX9Ba8nUH4uVv
 ```
