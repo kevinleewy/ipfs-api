@@ -59,5 +59,5 @@ export default ({ config, ipfs }) => {
     router.get('/stats/bw', statsController.bw.bind(statsController));
     router.get('/stats/repo', statsController.repo.bind(statsController));
 
-	return router;
+    return router;
 }

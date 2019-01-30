@@ -3,7 +3,7 @@
 ## Setup
 1. Clone this repository
 ```
-git clone <>
+git clone https://github.com/kevinleewy/ipfs-api.git
 ```
 
 2. Run setup script
