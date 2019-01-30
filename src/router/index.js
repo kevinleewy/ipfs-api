@@ -4,6 +4,7 @@ import {
     ConfigController,
     FilesController,
     MiscController,
+    PinController,
     StatsController,
     SwarmController
 } from '../controller';
@@ -15,6 +16,7 @@ export default ({ config, ipfs }) => {
     const configController = new ConfigController(ipfs);
     const filesController = new FilesController(ipfs);
     const miscController = new MiscController(ipfs);
+    const pinController = new PinController(ipfs);
     const statsController = new StatsController(ipfs);
     const swarmController = new SwarmController(ipfs);
 
@@ -47,6 +49,11 @@ export default ({ config, ipfs }) => {
     //Network
     router.get('/swarm/addrs', swarmController.addrs.bind(swarmController));
     router.get('/swarm/peers', swarmController.peers.bind(swarmController));
+
+    //Pin
+    router.post('/pin/:hash', pinController.add.bind(pinController))
+    router.get('/pin/:hash', pinController.ls.bind(pinController))
+    router.delete('/pin/:hash', pinController.rm.bind(pinController))
 
     //Stats
     router.get('/stats/bw', statsController.bw.bind(statsController));
