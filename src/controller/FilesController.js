@@ -12,17 +12,17 @@ export default class FilesController extends IPFSController {
             return;
         }
 
-        const results = await ipfs.files.add(files);
-        res.json(result);
-        
-        // this.ipfs.files.add(req.body, (err, result) => {
-        //     if (err) {
-        //         console.log(err);
-        //         res.json(err)
-        //     } else {
-        //         res.json(result);
-        //     }
-        // })
+        try {
+            const files = req.body.map(o => {
+                return {
+                    path: o.path,
+                    content: this.ipfs.types.Buffer.from(o.content)
+                };
+            });
+            const results = await this.ipfs.add(files);
+            res.json(results);
+        } catch(err) {
+            res.json(err)}
     }
     
     addFromFs(req, res) {
@@ -35,7 +35,7 @@ export default class FilesController extends IPFSController {
             hidden: true    //add hidden/dot files
         }
 
-        this.ipfs.util.addFromFs(path, options, (err, result) => {
+        this.ipfs.addFromFs(path, options, (err, result) => {
             if (err) {
                 console.log(err);
                 res.json(err)
@@ -49,7 +49,7 @@ export default class FilesController extends IPFSController {
 
         const url = req.body.url;
 
-        this.ipfs.util.addFromURL(url, (err, result) => {
+        this.ipfs.addFromURL(url, (err, result) => {
             if (err) {
                 console.log(err);
                 res.json(err)
