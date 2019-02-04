@@ -2,7 +2,7 @@
  * Module dependencies.
  */
 import 'dotenv/config';
-import ipfsAPI from 'ipfs-api';
+import ipfsClient from 'ipfs-http-client';
 import bodyParser from 'body-parser';
 import express from 'express';
 import fs from 'fs';
@@ -17,7 +17,7 @@ app.use(bodyParser.json()); // for parsing application/json
 //console.log("test: " + process.env.MY_SECRET);
 
 //Connecting to the IPFS network
-const ipfs = ipfsAPI('localhost', '5001', { protocol: 'http' })
+const ipfs = ipfsClient('localhost', '5001', { protocol: 'http' })
 
 //Reading file from computer
 let testFile = fs.readFileSync("assets/hello.txt");

@@ -2,16 +2,27 @@ import IPFSController from './IPFSController.js';
 
 export default class FilesController extends IPFSController {
     
-    add(req, res) {
+    async add(req, res) {
 
-        this.ipfs.files.add(path, (err, result) => {
-            if (err) {
-                console.log(err);
-                res.json(err)
-            } else {
-                res.json(result);
-            }
-        })
+        if(!Array.isArray(req.body)) {
+            res.json({
+                errCode: 1000,
+                errMessage: 'Body must be of type array'
+            })
+            return;
+        }
+
+        const results = await ipfs.files.add(files);
+        res.json(result);
+        
+        // this.ipfs.files.add(req.body, (err, result) => {
+        //     if (err) {
+        //         console.log(err);
+        //         res.json(err)
+        //     } else {
+        //         res.json(result);
+        //     }
+        // })
     }
     
     addFromFs(req, res) {
