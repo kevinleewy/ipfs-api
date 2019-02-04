@@ -1,0 +1,611 @@
+swagger: "2.0"
+info:
+  description: "This is the API specifications for WIP IPFS.  You can find out more on the [Wiki](https://wiki.filemaker.com:8443/display/WIP/API_Specs)."
+  version: "1.0"
+  title: "WIP IPFS API"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "kevin_lee@filemaker.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "ec2-XX-5XX-XXX-XX.us-west-1.compute.amazonaws.com:3000"
+basePath: "/api"
+tags:
+- name: "config"
+  description: "IPFS Configuration"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+- name: "files"
+  description: "File reading and writing"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+- name: "misc"
+  description: "Miscellanious operations"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+- name: "network"
+  description: "Network information"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+- name: "pin"
+  description: "File pinning operations"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"  
+- name: "stats"
+  description: "IPFS status"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"      
+schemes:
+- "http"
+paths:
+  /config:
+    get:
+      tags:
+      - "config"
+      summary: "Retrieves all IPFS config"
+      description: ""
+      operationId: "getConfig"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              type: object
+              properties:
+                API:
+                  type: object
+                  properties:
+                    HTTPHeaders:
+                      type: object
+                      properties:
+                        Server:
+                          type: array
+                          items:
+                            type: string
+                            example: "go-ipfs/0.4.15"
+                Addresses:
+                  type: object
+                  properties:
+                    API:
+                      type: string
+                      example: "/ip4/127.0.0.1/tcp/5001"
+                    Announce:
+                      type: array
+                      items:
+                        type: string
+                        example: "/ip4/10.0.0.0/ipcidr/8"
+                    Gateway:
+                      type: string
+                      example: "/ip4/0.0.0.0/tcp/8080"
+                    NoAnnounce:
+                      type: array
+                      items:
+                        type: string
+                        example:
+                          "/ip4/100.64.0.0/ipcidr/10"
+                Bootstrap:
+                  type: array
+                  items:
+                    type: string
+                    example: "/dnsaddr/bootstrap.libp2p.io/ipfs/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN"
+
+
+  /config/{key}:
+    get:
+      tags:
+      - "config"
+      summary: "Retrieves IPFS config by key"
+      description: "key should be '.' separated (e.g. Datastore.StorageMax)."
+      operationId: "getConfigByKey"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "key"
+        in: "path"
+        description: "config key"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Invalid key"
+          schema:
+            $ref: "#/definitions/Error"  
+  /add:
+    post:
+      tags:
+      - "files"
+      summary: "Add files to IPFS"
+      description: ""
+      operationId: "addFiles"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "files"
+        in: "body"
+        description: "Array of file path and content"
+        required: true
+        schema:
+          type: array
+          items:
+            type: object
+            required:
+              - locale
+            properties:
+              path:
+                type: string
+                example: "hello.txt"
+              content:
+                type: string
+                example: "Hello World!"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/FileInfo"
+        405:
+          description: "Invalid input"
+  /addFromUrl:
+    post:
+      tags:
+      - "files"
+      summary: "Add content of a URL to IPFS"
+      description: ""
+      operationId: "addFromURL"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "url"
+        in: "body"
+        description: "URL of content to add"
+        required: true
+        schema:
+          type: object
+          properties:
+            url:
+              type: string
+              example: "http://www.google.com"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/FileInfo"
+        405:
+          description: "'url' param must be an http(s) url"        
+
+  /cat/{cid}:
+    get:
+      tags:
+      - "files"
+      summary: "Retrieves contents of a file"
+      description: ""
+      operationId: "cat"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "cid"
+        in: "path"
+        description: "Content ID of file"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: string
+            example: 'Hello World! This is a text file stored on IPFS!'
+        400:
+          description: "Invalid CID supplied"
+  /get/{cid}:
+    get:
+      tags:
+      - "files"
+      summary: "Retrieves path and content of directory/files"
+      description: "Operation is recursive"
+      operationId: "getFiles"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "cid"
+        in: "path"
+        description: "Content ID of file"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/FileContent"
+        400:
+          description: "Invalid CID supplied"
+  /ls/{cid}:
+    get:
+      tags:
+      - "files"
+      summary: "Retrieves complete info on contents of a hash"
+      description: "Operation is not recursive"
+      operationId: "lsFiles"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "cid"
+        in: "path"
+        description: "Content ID of file/directory"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/LsFileInfo"
+        400:
+          description: "Invalid CID supplied"         
+    
+  /id:
+    get:
+      tags:
+      - "misc"
+      summary: "Retrieve IPFS ID"
+      description: ""
+      operationId: "getIPFSID"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            properties:
+              id:
+                type: string
+                example: "QmT8aj9j1GhsBnqzdutJsvEK5nWiwhcTS9bNELnUj8o8EC" 
+              publicKey:
+                type: string
+                example: "CAASpgIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDRc5bAyRwfeXeNmavB3iDvqs20aTkGlZQBJB/qna2Ng8cHOTIHIp2Ij6tbKg8lPNs4u7yzrr0C6m1BeQZUqXvp2hbEPpwAnnkicnbHMzwpkQmXd+AfAwwXKFonwzbgZsJzoRiFIr1tiDfZli0YOofmrgl5NiAAxgrvyUiWEICcALWNC5xEr96hFiuSyqPqR0Vrg4K2G4/yp16iOVUdrneKDyOK8HIV+ebh7g0emAfuDzBTYbp89d9uc1uRnBJIvjDqTAoZZO2/cG2gU1jYKCWArL/leZf7iXqEK4YXNaFbsdBoWC1pt2UYVFJuKdNqP2Vu8CMLo+BuP02vCRzmIQdJAgMBAAE="
+              addresses:
+                type: array
+                example: [
+                    "/ip4/127.0.0.1/tcp/4001/ipfs/QmT8aj9j1GhsBnqzdutJsvEK5nWiwhcTS9bNELnUj8o8EC",
+                    "/ip6/::1/tcp/4001/ipfs/QmT8aj9j1GhsBnqzdutJsvEK5nWiwhcTS9bNELnUj8o8EC",
+                    "/ip4/13.57.200.46/tcp/4001/ipfs/QmT8aj9j1GhsBnqzdutJsvEK5nWiwhcTS9bNELnUj8o8EC"
+                ]
+              agentVersion:
+                type: string
+                example: "go-ipfs/0.4.15/"
+              protocolVersion:
+                type: string
+                example: "ipfs/0.1.0"
+                
+  /version:
+    get:
+      tags:
+      - "misc"
+      summary: "Retrieve IPFS version"
+      description: ""
+      operationId: "getIPFSversion"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            properties:
+              version:
+                type: string
+                example: "0.4.15" 
+              commit:
+                type: string
+                example: ""
+              repo:
+                type: string
+                example: "6"
+  
+  /swarm/addrs:
+    get:
+      tags:
+      - "network"
+      summary: "Retrieve addresses in swarm"
+      description: ""
+      operationId: "getSwarmAddrs"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/SwarmAddr"
+              
+  /swarm/peers:
+    get:
+      tags:
+      - "network"
+      summary: "Retrieve peers in swarm"
+      description: ""
+      operationId: "getSwarmPeers"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/SwarmPeer"                 
+
+  /pin/{hash}:
+    get:
+      tags:
+      - "pin"
+      summary: "Retrieve pin information"
+      description: ""
+      operationId: "getPin"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "hash"
+        in: "path"
+        description: "Hash of content/dir"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                hash:
+                  type: string
+                  example: "QmfM2r8seH2GiRaC4esTjeraXEachRt8ZsSeGaWTPLyMoG" 
+                type:
+                  type: string
+                  example: "indirect through QmSuKb4voDNo39dVnVED1EQqKsK2ZZNYJH3cjQX8F9KaRU"
+    post:
+      tags:
+      - "pin"
+      summary: "Pin a content/dir to IPFS"
+      description: ""
+      operationId: "setPin"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "hash"
+        in: "path"
+        description: "Hash of content/dir"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                hash:
+                  type: string
+                  example: "QmfM2r8seH2GiRaC4esTjeraXEachRt8ZsSeGaWTPLyMoG"
+    delete:
+      tags:
+      - "pin"
+      summary: "Delete a pinned content/dir to IPFS"
+      description: ""
+      operationId: "removePin"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "hash"
+        in: "path"
+        description: "Hash of content/dir"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                hash:
+                  type: string
+                  example: "QmfM2r8seH2GiRaC4esTjeraXEachRt8ZsSeGaWTPLyMoG"  
+
+  /stats/bw:
+    get:
+      tags:
+      - "stats"
+      summary: "Retrieve bandwidth status"
+      description: ""
+      operationId: "getBwStats"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            properties:
+              totalIn:
+                type: string
+                example: "402097825" 
+              totalOut:
+                type: string
+                example: "360272419"
+              rateIn:
+                type: string
+                example: "43111.831772869584"
+              rateOut:
+                type: string
+                example: "38801.56590109611"            
+                
+  /stats/repo:
+    get:
+      tags:
+      - "stats"
+      summary: "Retrieve repository status"
+      description: ""
+      operationId: "getRepoStats"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            properties:
+              numObjects:
+                type: string
+                example: "63" 
+              repoSize:
+                type: string
+                example: "2170411"
+              repoPath:
+                type: string
+                example: "/data/ipfs"
+              version:
+                type: string
+                example: "fs-repo@6"
+              storageMax:
+                type: string
+                example: "20000000000"
+          
+definitions:
+  
+  Error:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+        example: 0
+      type:
+        type: "string"
+        example: "error"
+        
+  Buffer:
+    type: object
+    properties:
+      buffer:
+        type: object
+        properties:
+          type:
+            type: string
+            example: "Buffer"
+          data:
+            example: [
+                  4,
+                  10,
+                  10,
+                  11,
+                  141,
+                  6,
+                  15,
+                  161
+              ]
+  
+  FileContent:
+    type: object
+    properties:
+      path:
+        type: string
+        example: "testadd1.txt"
+      content:
+        type: string
+        example: "This is a test file!"
+  
+  FileInfo:
+    type: object
+    properties:
+      path:
+        type: string
+        example: "testadd1.txt"
+      hash:
+        type: string
+        example: "QmZ7DMhPYs1GjueKRFoA4T9YJa29ANTozr4q11YgZWChMC"
+      size:
+        type: integer
+        example: 27
+
+  LsFileInfo:
+    type: object
+    properties:
+      name:
+        type: string
+        example: "hello.txt"
+      path:
+        type: string
+        example: "QmSuKb4voDNo39dVnVED1EQqKsK2ZZNYJH3cjQX8F9KaRU/hello.txt"
+      size:
+        type: integer
+        example: 21
+      hash:
+        type: string
+        example: "QmfM2r8seH2GiRaC4esTjeraXEachRt8ZsSeGaWTPLyMoG"
+      type:
+        type: string
+        example: "file|dir"
+      depth:
+        type: integer
+        example: 1
+  
+  SwarmAddr:
+    type: object
+    properties:
+      id:
+        type: object
+        properties:
+          id:
+            type: string
+            example: "QmNM4NYpQo4XZr9mGJ8aJnj5JxFExmR3ndMdU5jUSUEYAt"
+      multiaddrs:
+        type: object
+        properties:
+          _multiaddrs:
+            type: array
+            items:
+              $ref: "#/definitions/Buffer"
+      protocols:
+        type: object
+        
+  SwarmPeer:
+    type: object
+    properties:
+      addr:
+        $ref: "#/definitions/Buffer"
+      peer:
+        type: object
+        properties:
+          id:
+            type: string
+            example: "QmSSgbFSkuiXL3qAcekQMAnXACSjWnHBrT8BpznR8rJpKP"
+      muxer:
+        type: string
+        example: "*sm_yamux.conn"
+   
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
