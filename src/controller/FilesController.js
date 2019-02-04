@@ -77,7 +77,7 @@ export default class FilesController extends IPFSController {
         
         const cid = req.params.cid;
 
-        this.ipfs.files.get(cid, (err, files) => {
+        this.ipfs.get(cid, (err, files) => {
             res.json(files.map(file => {
                 return {
                     path: file.path,
